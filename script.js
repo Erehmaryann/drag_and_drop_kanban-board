@@ -95,6 +95,8 @@ function createItemEl(columnEl, column, item, index) {
   listEl.setAttribute("draggable", true);
   // what should happen when the element is dragged.
   listEl.setAttribute("ondragstart", "drag(event)");
+  // Make list item editable
+  listEl.setAttribute("contenteditable", true);
   // Append to Column
   columnEl.appendChild(listEl);
 }
