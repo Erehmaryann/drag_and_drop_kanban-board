@@ -135,6 +135,26 @@ function updateDOM() {
   updateSavedColumns();
 }
 
+// Show Add Item Input Box
+const showInputBox = (column) => {
+  // Hide Item btn
+  addBtns[column].style.visibility = "hidden";
+  // Show save item btn
+  saveItemBtns[column].style.display = "flex";
+  // Show Add Item Container
+  addItemContainers[column].style.display = "flex";
+};
+
+// Hide Item Input Box
+const hideInputBox = (column) => {
+  // Show Item btn
+  addBtns[column].style.visibility = "visible";
+  // Hide save item btn
+  saveItemBtns[column].style.display = "none";
+  // Hide Add Item Container
+  addItemContainers[column].style.display = "none";
+};
+
 // Allows arrays to reflect Drag and Drop changes
 function rebuildArrays() {
   backlogListArray = [];
