@@ -135,6 +135,11 @@ function updateDOM() {
   updateSavedColumns();
 }
 
+// Add to Column List, Reset TextBox.
+function addToColumn(column) {
+  console.log(addItems[column].textContent);
+}
+
 // Show Add Item Input Box
 const showInputBox = (column) => {
   // Hide Item btn
@@ -153,6 +158,7 @@ const hideInputBox = (column) => {
   saveItemBtns[column].style.display = "none";
   // Hide Add Item Container
   addItemContainers[column].style.display = "none";
+  addToColumn(column);
 };
 
 // Allows arrays to reflect Drag and Drop changes
