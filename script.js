@@ -3,7 +3,7 @@ const saveItemBtns = document.querySelectorAll('.solid');
 const addItemContainers = document.querySelectorAll('.add-container');
 const addItems = document.querySelectorAll('.add-item');
 // Item Lists
-const itemLists = document.querySelectorAll('.drag-item-list');
+const listColumns = document.querySelectorAll('.drag-item-list');
 const backlogList = document.getElementById('backlog-list');
 const progressList = document.getElementById('progress-list');
 const completeList = document.getElementById('complete-list');
@@ -20,7 +20,7 @@ let onHoldListArray = [];
 let listArrays = [];
 
 // Drag Functionality
-
+let draggedItem;
 
 // Get Arrays from localStorage if available, set default values if not
 function getSavedColumns() {
@@ -50,6 +50,29 @@ function updateSavedColumns() {
   // localStorage.setItem('onHoldItems', JSON.stringify(onHoldListArray));
 }
 
+// When Item Starts Dragging
+const drag = (e) => {
+  draggedItem = e.target;
+  console.log("drag", draggedItem);
+};
+
+// To allow a drop, we must prevent the default handling of the element.
+// Column Allows for Item to Drop
+const allowDrop = (e) => {
+  e.preventDefault();
+
+};
+
+// When Item Enters Column Area
+const dragEnter = (column) => {
+  listColumns[column].classList.add("over");
+};
+
+// Dropping Item in Column
+const drop = (e) => {
+  e.preventDefault();
+};
+
 // Create DOM Elements for each list item
 function createItemEl(columnEl, column, item, index) {
   // console.log('columnEl:', columnEl);
@@ -62,6 +85,8 @@ function createItemEl(columnEl, column, item, index) {
   listEl.textContent = item;
   // make the item draggable
   listEl.setAttribute("draggable", true);
+  // what should happen when the element is dragged.
+  listEl.setAttribute("ondragstart", "drag(event)");
   // Append to Column
   columnEl.appendChild(listEl);
 }
