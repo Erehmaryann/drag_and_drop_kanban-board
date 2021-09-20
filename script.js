@@ -54,7 +54,6 @@ function updateSavedColumns() {
 // When Item Starts Dragging
 const drag = (e) => {
   draggedItem = e.target;
-  console.log("drag", draggedItem);
 };
 
 // To allow a drop, we must prevent the default handling of the element.
@@ -72,7 +71,7 @@ const dragEnter = (column) => {
 // Dropping Item in Column
 const drop = (e) => {
   e.preventDefault();
-  // Rmeove bg color and padding
+  // Remove bg color and padding
   listColumns.forEach((column) => {
     column.classList.remove("over");
   });
