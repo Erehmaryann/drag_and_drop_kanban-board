@@ -60,6 +60,8 @@ function createItemEl(columnEl, column, item, index) {
   const listEl = document.createElement('li');
   listEl.classList.add('drag-item');
   listEl.textContent = item;
+  // make the item draggable
+  listEl.setAttribute("draggable", true);
   // Append to Column
   columnEl.appendChild(listEl);
 }
