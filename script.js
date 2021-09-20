@@ -25,12 +25,19 @@ let currentColumn;
 
 // Get Arrays from localStorage if available, set default values if not
 function getSavedColumns() {
+
+
   if (localStorage.getItem('backlogItems')) {
-    backlogListArray = JSON.parse(localStorage.backlogItems);
-    progressListArray = JSON.parse(localStorage.progressItems);
-    completeListArray = JSON.parse(localStorage.completeItems);
-    onHoldListArray = JSON.parse(localStorage.onHoldItems);
+    backlogListArray = JSON.parse(localStorage.getItem('backlogItems'));
+    progressListArray = JSON.parse(localStorage.getItem('progressItems'));
+    completeListArray = JSON.parse(localStorage.getItem('completeItems'));
+    onHoldListArray = JSON.parse(localStorage.getItem('onHoldItems'));
+    // backlogListArray = JSON.parse(localStorage.backlogItems);
+    // progressListArray = JSON.parse(localStorage.progressItems);
+    // completeListArray = JSON.parse(localStorage.completeItems);
+    // onHoldListArray = JSON.parse(localStorage.onHoldItems);
   } else {
+    // Set Default Array Values
     backlogListArray = ['Release the course', 'Sit back and relax'];
     progressListArray = ['Work on projects', 'Listen to music'];
     completeListArray = ['Being cool', 'Getting stuff done'];
@@ -81,12 +88,26 @@ const drop = (e) => {
   rebuildArrays();
 };
 
+// Update Item - Delete if necessary, or Update Array values.;
+function updateItem(id, column) {
+  const selectedArray = listArrays[column];
+  const selectedColumnEl = listColumns[column].children;
+  if (!selectedColumnEl[id].textContent) {
+    delete selectedArray[id];
+  }
+  console.log(selectedArray, "selectedArray");
+  // Update DOM
+  updateDOM();
+}
+
+// filter arrays to remove empty items
+function filterArray(array) {
+  const filteredArray = array.filter((item) => item !== null);
+  return filteredArray;
+}
+
 // Create DOM Elements for each list item
 function createItemEl(columnEl, column, item, index) {
-  // console.log('columnEl:', columnEl);
-  // console.log('column:', column);
-  // console.log('item:', item);
-  // console.log('index:', index);
   // List Item
   const listEl = document.createElement('li');
   listEl.classList.add('drag-item');
@@ -97,6 +118,11 @@ function createItemEl(columnEl, column, item, index) {
   listEl.setAttribute("ondragstart", "drag(event)");
   // Make list item editable
   listEl.setAttribute("contenteditable", true);
+  // Set Id of each list item
+  listEl.id = index;
+  // listEl.setAttribute("id", index);
+  // Set focusOut attribute on each list item
+  listEl.setAttribute("onfocusout", `updateItem(${index}, ${column})`);
   // Append to Column
   columnEl.appendChild(listEl);
 }
@@ -113,24 +139,28 @@ function updateDOM() {
   backlogListArray.forEach((backlogItem, index) => {
     createItemEl(backlogList, 0, backlogItem, index);
   });
+  backlogListArray = filterArray(backlogListArray);
 
   // Progress Column
   progressList.textContent = '';
   progressListArray.forEach((progressItem, index) => {
     createItemEl(progressList, 1, progressItem, index);
   });
+  progressListArray = filterArray(progressListArray);
 
   // Complete Column
   completeList.textContent = '';
   completeListArray.forEach((completeItem, index) => {
     createItemEl(completeList, 2, completeItem, index);
   });
+  completeListArray = filterArray(completeListArray);
 
   // On Hold Column
   onHoldList.textContent = '';
   onHoldListArray.forEach((onHoldItem, index) => {
     createItemEl(onHoldList, 3, onHoldItem, index);
   });
+  onHoldListArray = filterArray(onHoldListArray);
 
   // Run getSavedColumns only once, Update Local Storage
   updatedOnLoad = true;
