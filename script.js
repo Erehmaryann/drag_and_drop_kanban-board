@@ -21,6 +21,7 @@ let listArrays = [];
 
 // Drag Functionality
 let draggedItem;
+let dragging = false;
 let currentColumn;
 
 // Get Arrays from localStorage if available, set default values if not
@@ -58,46 +59,23 @@ function updateSavedColumns() {
   // localStorage.setItem('onHoldItems', JSON.stringify(onHoldListArray));
 }
 
-// When Item Starts Dragging
-const drag = (e) => {
-  draggedItem = e.target;
-};
 
-// To allow a drop, we must prevent the default handling of the element.
-// Column Allows for Item to Drop
-const allowDrop = (e) => {
-  e.preventDefault();
-};
-
-// When Item Enters Column Area
-const dragEnter = (column) => {
-  listColumns[column].classList.add("over");
-  currentColumn = column;
-};
-
-// Dropping Item in Column
-const drop = (e) => {
-  e.preventDefault();
-  // Remove bg color and padding
-  listColumns.forEach((column) => {
-    column.classList.remove("over");
-  });
-  // Add Item to column
-  const parentEl = listColumns[currentColumn];
-  parentEl.appendChild(draggedItem);
-  rebuildArrays();
-};
 
 // Update Item - Delete if necessary, or Update Array values.;
 function updateItem(id, column) {
   const selectedArray = listArrays[column];
   const selectedColumnEl = listColumns[column].children;
-  if (!selectedColumnEl[id].textContent) {
-    delete selectedArray[id];
+  // If dragging is false
+  if (!dragging) {
+    // If selected column element is empty, remove it
+    if (!selectedColumnEl[id].textContent) {
+      delete selectedArray[id];
+    } else {
+      selectedArray[id] = selectedColumnEl[id].textContent;
+    }
+    // Update DOM
+    updateDOM();
   }
-  console.log(selectedArray, "selectedArray");
-  // Update DOM
-  updateDOM();
 }
 
 // filter arrays to remove empty items
@@ -222,6 +200,39 @@ function rebuildArrays() {
   }
   updateDOM();
 }
+
+// When Item Starts Dragging
+const drag = (e) => {
+  draggedItem = e.target;
+  dragging = true;
+};
+
+// To allow a drop, we must prevent the default handling of the element.
+// Column Allows for Item to Drop
+const allowDrop = (e) => {
+  e.preventDefault();
+};
+
+// When Item Enters Column Area
+const dragEnter = (column) => {
+  listColumns[column].classList.add("over");
+  currentColumn = column;
+};
+
+// Dropping Item in Column
+const drop = (e) => {
+  e.preventDefault();
+  // Remove bg color and padding
+  listColumns.forEach((column) => {
+    column.classList.remove("over");
+  });
+  // Add Item to column
+  const parentEl = listColumns[currentColumn];
+  parentEl.appendChild(draggedItem);
+  // Dragging Complete
+  dragging = false;
+  rebuildArrays();
+};
 
 // onload
 updateDOM();
