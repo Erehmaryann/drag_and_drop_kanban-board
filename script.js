@@ -98,7 +98,6 @@ function createItemEl(columnEl, column, item, index) {
   listEl.setAttribute("contenteditable", true);
   // Set Id of each list item
   listEl.id = index;
-  // listEl.setAttribute("id", index);
   // Set focusOut attribute on each list item
   listEl.setAttribute("onfocusout", `updateItem(${index}, ${column})`);
   // Append to Column
@@ -182,23 +181,30 @@ const hideInputBox = (column) => {
 
 // Allows arrays to reflect Drag and Drop changes
 function rebuildArrays() {
-  backlogListArray = [];
-  for (let i = 0; i < backlogList.children.length; i++) {
-    backlogListArray.push(backlogList.children[i].textContent);
-  }
-  progressListArray = [];
-  for (let i = 0; i < progressList.children.length; i++) {
-    progressListArray.push(progressList.children[i].textContent);
-  }
-  completeListArray = [];
-  for (let i = 0; i < completeList.children.length; i++) {
-    completeListArray.push(completeList.children[i].textContent);
-  }
-  onHoldListArray = [];
-  for (let i = 0; i < onHoldList.children.length; i++) {
-    onHoldListArray.push(onHoldList.children[i].textContent);
-  }
+  // Map func is better when you want to rebuild an array or add to an array
+  // whereas forEach is better when you want to iterate over an array without changing it.
+  // Anytime you see an empty array then a for loop it will be better to use map
+  backlogListArray = Array.from(backlogList.children).map((item) => item.textContent);
+  progressListArray = Array.from(progressList.children).map((item) => item.textContent);
+  completeListArray = Array.from(completeList.children).map((item) => item.textContent);
+  onHoldListArray = Array.from(onHoldList.children).map((item) => item.textContent);
   updateDOM();
+  // backlogListArray = [];
+  // for (let i = 0; i < backlogList.children.length; i++) {
+  //   backlogListArray.push(backlogList.children[i].textContent);
+  // }
+  // progressListArray = [];
+  // for (let i = 0; i < progressList.children.length; i++) {
+  //   progressListArray.push(progressList.children[i].textContent);
+  // }
+  // completeListArray = [];
+  // for (let i = 0; i < completeList.children.length; i++) {
+  //   completeListArray.push(completeList.children[i].textContent);
+  // }
+  // onHoldListArray = [];
+  // for (let i = 0; i < onHoldList.children.length; i++) {
+  //   onHoldListArray.push(onHoldList.children[i].textContent);
+  // }
 }
 
 // When Item Starts Dragging
